@@ -16,7 +16,7 @@ use Isotope\Model\Config as IsoConfig;
 use Isotope\Interfaces\IsotopeProduct;
 use Isotope\Model\Product;
 use Isotope\Isotope;
-use Rhyme\Feeds\Rss20;
+use Rhyme\Feed\Rss20;
 use Rhyme\Model\GoogleTaxonomy;
 
 /**

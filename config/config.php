@@ -44,3 +44,8 @@ $GLOBALS['TL_CRON']['daily'][] = array('Rhyme\IsotopeFeeds', 'generateFeeds');
  */
 $GLOBALS['TL_HOOKS']['removeOldFeeds'][] = array('Rhyme\Hooks\RemoveOldFeeds\IsotopeFeeds', 'preserveFeeds');
 $GLOBALS['TL_HOOKS']['executePreActions'][] = array('Rhyme\Hooks\ExecutePreActions\IsotopeFeeds', 'ajaxHandler');
+
+/**
+* Models
+*/
+$GLOBALS['TL_MODELS'][\Rhyme\Model\GoogleTaxonomy::getTable()] = 'Rhyme\Model\GoogleTaxonomy';
