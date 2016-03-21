@@ -30,7 +30,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['list' ]['global_operations']['cache_feeds'
 $GLOBALS['TL_DCA']['tl_iso_product']['list' ]['global_operations']['generate_feeds'] = array
 (
 	'label'				=> &$GLOBALS['TL_LANG']['tl_iso_product']['generate_feeds'],
-	'href'				=> 'act=generatefeeds',
+	'href'				=> 'act=generateFeeds',
 	'class'				=> 'header_iso_feeds isotope-tools',
 	'attributes'		=> 'onclick="Backend.getScrollOffset();"',
 );
@@ -38,8 +38,8 @@ $GLOBALS['TL_DCA']['tl_iso_product']['list' ]['global_operations']['generate_fee
 /**
  * Fields
  */
-$GLOBALS['TL_DCA']['tl_iso_product']['fields']['published']['save_callback'][] = array('Rhyme\Backend\IsotopeProduct\FeedCallbacks', 'toggleProduct');
- 
+// $GLOBALS['TL_DCA']['tl_iso_product']['fields']['published']['save_callback'][] = array('Rhyme\Backend\IsotopeProduct\FeedCallbacks', 'toggleProduct');
+
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['useFeed'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['useFeed'],
