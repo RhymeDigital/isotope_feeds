@@ -20,8 +20,6 @@ $GLOBALS['TL_DCA']['tl_iso_product']['config']['ondelete_callback'][] = array('R
 /**
  * Global operations
  */
-// $GLOBALS['TL_DCA']['tl_iso_product']['fields']['published']['save_callback'][] = array('Rhyme\Backend\IsotopeProduct\FeedCallbacks', 'toggleProduct');
- 
 $GLOBALS['TL_DCA']['tl_iso_product']['list' ]['global_operations']['cache_feeds'] = array
 (
 	'label'				=> &$GLOBALS['TL_LANG']['tl_iso_product']['cache_feeds'],
@@ -39,13 +37,9 @@ $GLOBALS['TL_DCA']['tl_iso_product']['list' ]['global_operations']['generate_fee
 
 /**
  * Fields
-<<<<<<< HEAD
- */ 
-=======
  */
-$GLOBALS['TL_DCA']['tl_iso_product']['fields']['published']['save_callback'][] = array('Rhyme\Backend\IsotopeProduct\FeedCallbacks', 'toggleProduct');
- 
->>>>>>> ccbd3e08dc341202f157256f0e637f7d5744afd2
+// $GLOBALS['TL_DCA']['tl_iso_product']['fields']['published']['save_callback'][] = array('Rhyme\Backend\IsotopeProduct\FeedCallbacks', 'toggleProduct');
+
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['useFeed'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['useFeed'],
