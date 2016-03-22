@@ -20,7 +20,7 @@ var RefreshCache =
 		}
 		var request = new Request.Contao({
 			url: window.location.href,
-			data: 'isAjax=1&action=startCache&offset=' + offset,
+			data: 'isAjax=1&action=startCache&offset=' + offset + '&REQUEST_TOKEN=' + REQUEST_TOKEN,
 			onSuccess: function(content, json){
 				if(json.data){
 					if (json.data.offset != 'finished'){
