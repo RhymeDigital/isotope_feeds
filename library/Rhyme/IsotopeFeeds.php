@@ -238,6 +238,17 @@ class IsotopeFeeds extends \Controller
 		if(is_dir(TL_ROOT . '/' .  $strDir))
 		{
 			$arrFiles = scan(TL_ROOT . '/' .  $strDir);
+			
+			//HOOK for other data that needs to be added and sorting the array
+			if (isset($GLOBALS['ISO_HOOKS']['feedFiles']) && is_array($GLOBALS['ISO_HOOKS']['feedFiles']))
+			{
+				foreach ($GLOBALS['ISO_HOOKS']['feedFiles'] as $callback)
+				{
+					$this->import($callback[0]);
+					$arrFiles = $this->$callback[0]->$callback[1]($arrFiles, $strType, $objFeed, $objConfig);
+				}
+			}
+			
 			foreach($arrFiles as $file)
 			{
 				if(is_file(TL_ROOT  . '/' . $strDir . '/' . $file))
