@@ -59,12 +59,12 @@ class FeedCallbacks extends \Backend
 	 */
 	public function generateFeeds()
 	{
-		if (\Input::get('act') == 'generatefeeds' && \Input::get('key') == '')
+		if (\Input::get('act') == 'generateFeeds' && \Input::get('key') == '')
 		{
 			$objFeeds = \System::importStatic('Rhyme\IsotopeFeeds');
 			$objFeeds->generateFeeds();
 			
-			\Controller::redirect(str_replace('&act=generatefeeds', '', \Environment::get('request')));
+			\Controller::redirect(str_replace('&act=generateFeeds', '', \Environment::get('request')));
 		}
 	}
 	
