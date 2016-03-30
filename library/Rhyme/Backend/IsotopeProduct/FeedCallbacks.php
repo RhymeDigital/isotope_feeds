@@ -59,14 +59,23 @@ class FeedCallbacks extends \Backend
 	 */
 	public function generateFeeds()
 	{
-		if (\Input::get('act') == 'generatefeeds' && \Input::get('key') == '')
+		if (\Input::get('act') == 'generateFeeds' && \Input::get('key') == '')
 		{
 			$objFeeds = \System::importStatic('Rhyme\IsotopeFeeds');
 			$objFeeds->generateFeeds();
 			
-			\Controller::redirect(str_replace('&act=generatefeeds', '', \Environment::get('request')));
+			\Controller::redirect(str_replace('&act=generateFeeds', '', \Environment::get('request')));
 		}
+	}
 	
+	/**
+	 * Cache the product XML for each store config
+	 * @param Contao\DataContainer
+	 */
+	public function cacheProduct(\DataContainer $dc)
+	{
+		$this->import('Rhyme\IsotopeFeeds', 'IsotopeFeeds');
+		$this->IsotopeFeeds->cacheProduct($dc->id);
 	}
 	
 	/**

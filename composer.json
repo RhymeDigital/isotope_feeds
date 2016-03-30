@@ -1,0 +1,26 @@
+{
+  "name":"rhymedigital/isotope-feeds",
+  "description":"Updated implementation for creating Product Feeds in Isotope eCommerce for Contao Open Source CMS",
+  "keywords":["contao", "isotope", "feed", "RSS 2.0", "Google Merchant"],
+  "type":"contao-module",
+  "license":"LGPL-3.0+",
+  "authors":[
+    {
+      "name":"Blair Winans",
+      "homepage":"http://rhyme.digital"
+    }
+  ],
+  "require":{
+    "php":">=5.3",
+    "contao/core": "~3.2",
+    "contao-community-alliance/composer-plugin": "~2.4",
+    "isotope/isotope-core": "~2.2"
+  },
+  "extra":{
+    "contao": {
+      "sources":{
+        "": "system/modules/isotope_feeds"
+      }
+    }
+  }
+}

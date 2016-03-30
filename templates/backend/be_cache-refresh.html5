@@ -28,7 +28,9 @@
   <script><?php echo $this->getDateString(); ?></script>
   <?php echo $this->javascripts; ?>
   <!--[if lt IE 9]><script src="<?php echo TL_ASSETS_URL; ?>assets/html5shiv/<?php echo $GLOBALS['TL_ASSETS']['HTML5SHIV']; ?>/html5shiv.js"></script><![endif]-->
-
+  <script type="text/javascript">
+    var REQUEST_TOKEN = '<?php echo \RequestToken::get(); ?>';
+  </script>
 </head>
 <body class="w200 <?php echo $this->ua; ?>">
 
