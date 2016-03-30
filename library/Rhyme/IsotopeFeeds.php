@@ -15,6 +15,7 @@ namespace Rhyme;
 use Isotope\Model\Config as IsoConfig;
 use Isotope\Interfaces\IsotopeProduct;
 use Isotope\Model\Product;
+use Isotope\Model\ProductPrice;
 use Isotope\Isotope;
 use Rhyme\Feed\Rss20;
 use Rhyme\Model\GoogleTaxonomy;
@@ -237,6 +238,17 @@ class IsotopeFeeds extends \Controller
 		if(is_dir(TL_ROOT . '/' .  $strDir))
 		{
 			$arrFiles = scan(TL_ROOT . '/' .  $strDir);
+			
+			//HOOK for other data that needs to be added and sorting the array
+			if (isset($GLOBALS['ISO_HOOKS']['feedFiles']) && is_array($GLOBALS['ISO_HOOKS']['feedFiles']))
+			{
+				foreach ($GLOBALS['ISO_HOOKS']['feedFiles'] as $callback)
+				{
+					$this->import($callback[0]);
+					$arrFiles = $this->$callback[0]->$callback[1]($arrFiles, $strType, $objFeed, $objConfig);
+				}
+			}
+			
 			foreach($arrFiles as $file)
 			{
 				if(is_file(TL_ROOT  . '/' . $strDir . '/' . $file))
@@ -292,7 +304,7 @@ class IsotopeFeeds extends \Controller
 		if($objProduct->isPublished() && $objProduct->useFeed)
 		{
 			//Check for variants and run them instead if they exist
-			if($objProduct->hasVariants())
+			if($objProduct->hasVariants() && !$objProduct->isVariant())
 			{
 				foreach($objProduct->getVariantIds() as $variantID)
 				{
@@ -328,7 +340,11 @@ class IsotopeFeeds extends \Controller
 			//Sku, price, etc
 			$objItem->id = $objProduct->id;
 			$objItem->sku = strlen($objProduct->sku) ? $objProduct->sku : $objProduct->alias;
-			$objItem->price = Isotope::formatPrice($objProduct->original_price) .' '. $objConfig->currency;
+			$objPrice = ProductPrice::findOneByPid($objProduct->id);
+			$objTiers = \Database::getInstance()->prepare("SELECT * FROM tl_iso_product_pricetier WHERE pid=? ORDER BY min")
+			                                    ->limit(1)
+			                                    ->execute($objPrice->id);
+			$objItem->price = Isotope::formatPrice($objTiers->price) .' '. $objConfig->currency;
 
 			//Google basic settings
 			$objItem->condition = $objProduct->gid_condition;
@@ -361,11 +377,16 @@ class IsotopeFeeds extends \Controller
 			$arrImages = static::getProductImages($objProduct, $objConfig, $strLink);
 			if(is_array($arrImages) && count($arrImages)>0)
 			{
-				$objItem->image_link = $arrImages[0];
+				$objItem->image_link = $strLink . $arrImages[0];
 				$objItem->addEnclosure($arrImages[0]);
 				unset($arrImages[0]);
 				if(count($arrImages)>0)
 				{
+    				foreach($arrImages as $k=>$image)
+    				{
+        				//Add the base URL
+        				$arrImages[$k] = $strLink . $image;
+    				}
 					//Additional images
 					$objItem->additional_image_link = $arrImages;
 				}

@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['list' ]['global_operations']['generate_fee
 /**
  * Fields
  */
-// $GLOBALS['TL_DCA']['tl_iso_product']['fields']['published']['save_callback'][] = array('Rhyme\Backend\IsotopeProduct\FeedCallbacks', 'toggleProduct');
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['published']['save_callback'][] = array('Rhyme\Backend\IsotopeProduct\FeedCallbacks', 'toggleProduct');
 
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['useFeed'] = array
 (

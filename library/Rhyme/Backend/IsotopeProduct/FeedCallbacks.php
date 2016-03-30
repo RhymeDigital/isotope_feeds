@@ -79,6 +79,16 @@ class FeedCallbacks extends \Backend
 	}
 	
 	/**
+	 * Cache the product XML for each store config
+	 * @param mixed
+	 * @param Contao\DataContainer
+	 */
+	public function toggleProduct($varValue, \DataContainer $dc)
+	{
+		$this->cacheProduct($dc);
+	}
+	
+	/**
 	 * Generate full feed files
 	 * @param mixed
 	 * @param object
