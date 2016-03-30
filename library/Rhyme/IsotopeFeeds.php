@@ -15,6 +15,7 @@ namespace Rhyme;
 use Isotope\Model\Config as IsoConfig;
 use Isotope\Interfaces\IsotopeProduct;
 use Isotope\Model\Product;
+use Isotope\Model\ProductPrice;
 use Isotope\Isotope;
 use Rhyme\Feed\Rss20;
 use Rhyme\Model\GoogleTaxonomy;
@@ -328,7 +329,11 @@ class IsotopeFeeds extends \Controller
 			//Sku, price, etc
 			$objItem->id = $objProduct->id;
 			$objItem->sku = strlen($objProduct->sku) ? $objProduct->sku : $objProduct->alias;
-			$objItem->price = Isotope::formatPrice($objProduct->original_price) .' '. $objConfig->currency;
+			$objPrice = ProductPrice::findOneByPid($objProduct->id);
+			$objTiers = \Database::getInstance()->prepare("SELECT * FROM tl_iso_product_pricetier WHERE pid=? ORDER BY min")
+			                                    ->limit(1)
+			                                    ->execute($objPrice->id);
+			$objItem->price = Isotope::formatPrice($objTiers->price) .' '. $objConfig->currency;
 
 			//Google basic settings
 			$objItem->condition = $objProduct->gid_condition;
