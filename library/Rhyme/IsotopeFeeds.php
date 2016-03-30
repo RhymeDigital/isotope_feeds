@@ -304,7 +304,7 @@ class IsotopeFeeds extends \Controller
 		if($objProduct->isPublished() && $objProduct->useFeed)
 		{
 			//Check for variants and run them instead if they exist
-			if($objProduct->hasVariants())
+			if($objProduct->hasVariants() && !$objProduct->isVariant())
 			{
 				foreach($objProduct->getVariantIds() as $variantID)
 				{
