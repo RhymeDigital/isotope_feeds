@@ -377,16 +377,11 @@ class IsotopeFeeds extends \Controller
 			$arrImages = static::getProductImages($objProduct, $objConfig, $strLink);
 			if(is_array($arrImages) && count($arrImages)>0)
 			{
-				$objItem->image_link = $strLink . $arrImages[0];
+				$objItem->image_link = $arrImages[0];
 				$objItem->addEnclosure($arrImages[0]);
 				unset($arrImages[0]);
 				if(count($arrImages)>0)
 				{
-    				foreach($arrImages as $k=>$image)
-    				{
-        				//Add the base URL
-        				$arrImages[$k] = $strLink . $image;
-    				}
 					//Additional images
 					$objItem->additional_image_link = $arrImages;
 				}
