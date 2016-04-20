@@ -67,25 +67,34 @@ class FeedCallbacks extends \Backend
 			\Controller::redirect(str_replace('&act=generateFeeds', '', \Environment::get('request')));
 		}
 	}
-	
+
 	/**
 	 * Cache the product XML for each store config
-	 * @param Contao\DataContainer
+	 * @param $id
 	 */
-	public function cacheProduct(\DataContainer $dc)
+	public function cacheProduct($id)
 	{
 		$this->import('Rhyme\IsotopeFeeds', 'IsotopeFeeds');
-		$this->IsotopeFeeds->cacheProduct($dc->id);
+		$this->IsotopeFeeds->cacheProduct($id);
 	}
-	
+
 	/**
 	 * Cache the product XML for each store config
 	 * @param mixed
-	 * @param Contao\DataContainer
+	 * @param mixed
 	 */
-	public function toggleProduct($varValue, \DataContainer $dc)
+	public function toggleProduct($varValue, $dc)
 	{
-		$this->cacheProduct($dc);
+		if ($dc instanceof \DataContainer)
+		{
+			$this->cacheProduct($dc->id);
+		}
+		else if (strlen(\Input::get('tid')))
+		{
+			$this->cacheProduct(\Input::get('tid'));
+		}
+
+		return $varValue;
 	}
 	
 	/**
