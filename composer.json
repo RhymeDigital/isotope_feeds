@@ -14,8 +14,14 @@
     "php":">=5.3",
     "contao/core": "~3.2",
     "contao-community-alliance/composer-plugin": "~2.4",
-    "isotope/isotope-core": "~2.2",
-    "terminal42/contao-namespace-class-loader": "~1.0"
+    "isotope/isotope-core": "~2.2"
+  },
+  "autoload": {
+    "psr-0": {
+        "Rhyme\\": [
+          "system/modules/isotope_feeds/library"
+        ]
+    },
   },
   "extra":{
     "contao": {
