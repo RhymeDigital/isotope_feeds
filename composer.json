@@ -21,7 +21,7 @@
         "Rhyme\\": [
           "system/modules/isotope_feeds/library"
         ]
-    },
+    }
   },
   "extra":{
     "contao": {
