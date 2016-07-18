@@ -7,3 +7,11 @@ By default, this extension ships with two Feed Types:
 2. Google Merchant (formerly known as Google Base or also Google Shopping)
 
 Note: In order to create a properly formatted Google Merchant feed, you will need to fill out the additional information on your products in the product management section.
+
+## Dependencies
+
+Built for
+* https://github.com/isotope/core
+
+If you aren't using Composer for installation, you need to install:
+* https://github.com/terminal42/contao-NamespaceClassLoader
