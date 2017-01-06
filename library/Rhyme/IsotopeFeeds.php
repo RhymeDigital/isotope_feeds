@@ -245,7 +245,7 @@ class IsotopeFeeds extends \Controller
 				foreach ($GLOBALS['ISO_HOOKS']['feedFiles'] as $callback)
 				{
 					$this->import($callback[0]);
-					$arrFiles = $this->$callback[0]->$callback[1]($arrFiles, $strType, $objFeed, $objConfig);
+					$arrFiles = $this->{$callback[0]}->{$callback[1]}($arrFiles, $strType, $objFeed, $objConfig);
 				}
 			}
 			
@@ -260,7 +260,7 @@ class IsotopeFeeds extends \Controller
 			
 			// Create file
 			$objFeedFile = new \File($strFile);
-			$objFeedFile->write($this->replaceInsertTags($objFeed->$arrType[1]()));
+			$objFeedFile->write($this->replaceInsertTags($objFeed->{$arrType[1]}()));
 			$objFeedFile->close();
 		}
 	}
@@ -369,7 +369,7 @@ class IsotopeFeeds extends \Controller
 				foreach ($GLOBALS['ISO_HOOKS']['feedItem'] as $callback)
 				{
 					$this->import($callback[0]);
-					$objItem = $this->$callback[0]->$callback[1]($strType, $objItem, $objProduct);
+					$objItem = $this->{$callback[0]}->{$callback[1]}($strType, $objItem, $objProduct);
 				}
 			}
 
