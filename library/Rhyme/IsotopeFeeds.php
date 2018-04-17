@@ -171,6 +171,10 @@ class IsotopeFeeds extends \Controller
 		$this->removeOldFeeds();
 		$objConfig = IsoConfig::findBy('addFeed', '1');
 
+		if (!$objConfig) {
+			return;
+		}
+
 		while ($objConfig->next())
 		{
 			$arrFeedFiles = static::getFeedFiles($objConfig);
