@@ -264,7 +264,7 @@ class IsotopeFeeds extends \Controller
 			
 			// Create file
 			$objFeedFile = new \File($strFile);
-			$objFeedFile->write($this->replaceInsertTags($objFeed->$arrType[1]()));
+			$objFeedFile->write($this->replaceInsertTags($objFeed->{$arrType[1]}()));
 			$objFeedFile->close();
 		}
 	}
