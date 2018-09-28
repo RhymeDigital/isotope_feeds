@@ -30,19 +30,19 @@ use Rhyme\Model\GoogleTaxonomy;
  */
 class IsotopeFeeds extends \Controller
 {
-    
+
     /**
      * Cache of files for each feed
      * @var array
      */
     protected static $arrFeedCache = array();
-    
+
     /**
      * Cache of directories for the XML item files
      * @var array
      */
     protected static $arrXMLDirCache = array();
-    
+
     /**
 	 * Return a feed name from a config
 	 * @param mixed \Isotope\Model\Config or Contao\DatabaseResult
@@ -52,7 +52,7 @@ class IsotopeFeeds extends \Controller
 	{
     	return $objConfig->feedName != '' ? $objConfig->feedName : 'products' . $objConfig->id;
     }
-    
+
     /**
 	 * Return the base feed cache dir from a config
 	 * @param mixed \Isotope\Model\Config or Contao\DatabaseResult
@@ -62,7 +62,7 @@ class IsotopeFeeds extends \Controller
 	{
     	return 'isotope/cache/' . $objConfig->id;
     }
-    
+
     /**
 	 * Return the feed cache directories
 	 * @param mixed \Isotope\Model\Config or Contao\DatabaseResult
@@ -78,10 +78,10 @@ class IsotopeFeeds extends \Controller
         	    static::$arrXMLDirCache[$objConfig->id][$feedType] =  static::getFeedCacheBaseDir($objConfig) . '/' .  $feedType;
             }
         }
-    	
+
     	return static::$arrXMLDirCache[$objConfig->id];
     }
-    
+
     /**
 	 * Return the feed type from the feed file
 	 * @param string
@@ -92,7 +92,7 @@ class IsotopeFeeds extends \Controller
     	$arrTypes = array_flip(static::$arrXMLDirCache[$objConfig->id]);
     	return $arrTypes[$strDir];
     }
-    
+
     /**
 	 * Return an array of its feed files from a config
 	 * @param mixed \Isotope\Model\Config or Contao\DatabaseResult
@@ -111,11 +111,11 @@ class IsotopeFeeds extends \Controller
                 static::$arrFeedCache[$objConfig->id][$feedType] = $strFile;
             }
         }
-    	
+
     	return static::$arrFeedCache[$objConfig->id];
     }
-    
-        
+
+
     /**
 	 * Return the feed type from the feed file
 	 * @param string
@@ -127,7 +127,7 @@ class IsotopeFeeds extends \Controller
     	{
         	static::getFeedFiles($objConfig);
     	}
-    	
+
     	$arrTypes = array_flip(static::$arrFeedCache[$objConfig->id]);
     	return $arrTypes[$strFile];
     }
@@ -198,7 +198,7 @@ class IsotopeFeeds extends \Controller
     	{
         	return;
     	}
-    	
+
 		$objConfig = IsoConfig::findBy('addFeed', '1');
 		while ($objConfig->next())
 		{
@@ -337,7 +337,15 @@ class IsotopeFeeds extends \Controller
 			$objItem->published = time();
 
 			// Prepare the description
-			$strDescription = $objProduct->description;
+			if (null !== ($objType = $objProduct->getType()) &&
+                (in_array('gid_description', $objType->getAttributes(), true)
+                    || ($objProduct->isVariant() && in_array('gid_description', $objType->getVariantAttributes()))
+                )
+            ) {
+                $strDescription = $objProduct->gid_description ?: $objProduct->description;
+			} else {
+			    $strDescription = $objProduct->description;
+			}
 			$strDescription = $this->replaceInsertTags($strDescription);
 			$objItem->description = $this->convertRelativeUrls($strDescription, $strLink);
 
@@ -425,8 +433,8 @@ class IsotopeFeeds extends \Controller
                 if (strpos($strFile, '/') === false) {
                     $strFile = 'isotope/' . strtolower(substr($strFile, 0, 1)) . '/' . $strFile;
                 }
-        
-                if (is_file(TL_ROOT . '/' . $strFile)) 
+
+                if (is_file(TL_ROOT . '/' . $strFile))
                 {
                     $arrImages[] = $strLink . $strFile;
                 }

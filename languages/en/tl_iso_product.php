@@ -22,6 +22,7 @@ $GLOBALS['TL_LANG']['tl_iso_product']['gid_gtin'] 				= array('Global Trade Item
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_mpn'] 				= array('Manufacturer Part Number', 'Please enter the MPN for the product. Not required for custom products, apparel, or media, or if you are providing Brand and GTIN');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_google_product_category'] = array('Google Product Taxonomy', 'Please select from the predefined values from Google\'s product taxonomy.  Required for all items that belong to the \'Apparel and Accessories\', \'Media\', and \'Software\' categories. This attribute should be included in addition to, not as a replacement for, the \'Your Product Type\' attribute.');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_product_type'] = array('Your Product Type(s)', 'This attribute contains the category of the product according to your taxonomy. As with the \'Google Product Category\' attribute, include the category with full “breadcrumb” information. For example, \'Books > Non-Fiction > Sports > Baseball\' is better than just \'Baseball\'. Any separator such as > or / may be used.');
+$GLOBALS['TL_LANG']['tl_iso_product']['gid_description'] = array('Google Product Description', 'Please enter a description for this product in the Google Feed.');
 
 /**
  * Reference
