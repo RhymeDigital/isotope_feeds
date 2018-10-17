@@ -11,10 +11,17 @@
     }
   ],
   "require":{
-    "php":">=5.3",
+    "php":"^5.3|^7.0",
     "contao/core": "~3.2",
     "contao-community-alliance/composer-plugin": "~2.4",
     "isotope/isotope-core": "~2.2"
+  },
+  "autoload": {
+    "psr-0": {
+        "Rhyme\\": [
+          "system/modules/isotope_feeds/library"
+        ]
+    }
   },
   "extra":{
     "contao": {

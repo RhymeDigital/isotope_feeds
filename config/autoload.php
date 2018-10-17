@@ -12,7 +12,10 @@
 /**
  * Register namespace
  */
-NamespaceClassLoader::add('Rhyme', 'system/modules/isotope_feeds/library');
+if (class_exists('NamespaceClassLoader'))
+{
+    NamespaceClassLoader::add('Rhyme', 'system/modules/isotope_feeds/library');
+}
 
 
 /**

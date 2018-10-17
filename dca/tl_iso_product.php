@@ -136,3 +136,13 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_product_type'] = array
 	'attributes'			  => array('legend'=>'feed_legend:hide', 'fixed'=>true),
 	'sql'                     => "blob NULL"
 );
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_description'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_description'],
+    'exclude'                 => true,
+    'inputType'               => 'textarea',
+    'eval'                    => array('mandatory'=>true, 'tl_class' => 'clr'),
+    'attributes'              => array('legend'=>'feed_legend:hide'),
+    'sql'                     => "text NULL"
+);
