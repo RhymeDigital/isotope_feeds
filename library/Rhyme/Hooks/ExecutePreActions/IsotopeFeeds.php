@@ -49,8 +49,14 @@ class IsotopeFeeds extends \Controller
 			{
 				while($objProducts->next())
 				{
-					foreach($objConfigs->getIterator() as $objConfig)
+					foreach($objConfigs as $objConfig)
 					{
+                        // Override shop configuration to generate correct price
+                        $objCart = new Cart();
+                        $objCart->config_id = $objConfig->id;
+                        Isotope::setConfig($objConfig);
+                        Isotope::setCart($objCart);
+
 						$arrFeedFiles = IsoFeeds::getFeedFiles($objConfig);
 						foreach( $arrFeedFiles as $feedFile )
 						{

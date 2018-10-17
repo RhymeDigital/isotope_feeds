@@ -15,6 +15,7 @@ namespace Rhyme;
 use Isotope\Model\Config as IsoConfig;
 use Isotope\Interfaces\IsotopeProduct;
 use Isotope\Model\Product;
+use Isotope\Model\ProductCollection\Cart;
 use Isotope\Model\ProductPrice;
 use Isotope\Isotope;
 use Rhyme\Feed\Rss20;
@@ -199,9 +200,15 @@ class IsotopeFeeds extends \Controller
         	return;
     	}
 
-		$objConfig = IsoConfig::findBy('addFeed', '1');
-		while ($objConfig->next())
+		$objConfigs = IsoConfig::findBy('addFeed', '1');
+		foreach ($objConfigs as $objConfig)
 		{
+		    // Override shop configuration to generate correct price
+            $objCart = new Cart();
+            $objCart->config_id = $objConfig->id;
+            Isotope::setConfig($objConfig);
+            Isotope::setCart($objCart);
+
 			$arrFeedFiles = static::getFeedFiles($objConfig);
 			foreach( $arrFeedFiles as $feedFile )
 			{
@@ -352,11 +359,7 @@ class IsotopeFeeds extends \Controller
 			//Sku, price, etc
 			$objItem->id = $objProduct->id;
 			$objItem->sku = strlen($objProduct->sku) ? $objProduct->sku : $objProduct->alias;
-			$objPrice = ProductPrice::findOneByPid($objProduct->id);
-			$objTiers = \Database::getInstance()->prepare("SELECT * FROM tl_iso_product_pricetier WHERE pid=? ORDER BY min")
-			                                    ->limit(1)
-			                                    ->execute($objPrice->id);
-			$objItem->price = Isotope::formatPrice($objTiers->price) .' '. $objConfig->currency;
+			$objItem->price = Isotope::formatPriceWithCurrency($objProduct->getPrice()->getAmount(), false);
 
 			//Google basic settings
 			$objItem->condition = $objProduct->gid_condition;
