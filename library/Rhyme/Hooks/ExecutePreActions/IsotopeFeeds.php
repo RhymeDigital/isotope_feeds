@@ -12,6 +12,8 @@
 
 namespace Rhyme\Hooks\ExecutePreActions;
 
+use Isotope\Isotope;
+use Isotope\Model\ProductCollection\Cart;
 use Rhyme\IsotopeFeeds as IsoFeeds;
 use Haste\Http\Response\JsonResponse;
 use Isotope\Model\Product;
