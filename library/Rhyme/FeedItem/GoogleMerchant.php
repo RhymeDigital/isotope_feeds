@@ -70,7 +70,7 @@ class GoogleMerchant extends Rss20
 		
 		foreach($arrGoogleFields as $strKey)
 		{
-			if($this->__isset($strKey) && count($this->$strKey) )
+			if($this->__isset($strKey))
 			{
 				if(is_array($this->$strKey) && count($this->$strKey))
 				{
