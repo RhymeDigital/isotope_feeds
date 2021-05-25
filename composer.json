@@ -6,28 +6,24 @@
   "license":"LGPL-3.0+",
   "authors":[
     {
-      "name":"Blair Winans",
+      "name":"Rhyme Digital, LLC",
       "homepage":"http://rhyme.digital"
     }
   ],
   "require":{
-    "php":"^5.3|^7.0",
-    "contao/core": "~3.2",
-    "contao-community-alliance/composer-plugin": "~2.4",
-    "isotope/isotope-core": "~2.2"
+    "php":"^7.1",
+    "contao/core-bundle": "^4.9",
+    "isotope/isotope-core": "~2.7"
+  },
+  "require-dev": {
+    "contao/manager-plugin": "^2.7"
   },
   "autoload": {
-    "psr-0": {
-        "Rhyme\\": [
-          "system/modules/isotope_feeds/library"
-        ]
+    "psr-4": {
+        "Rhyme\\IsotopeFeedsBundle\\": "src"
     }
   },
   "extra":{
-    "contao": {
-      "sources":{
-        "": "system/modules/isotope_feeds"
-      }
-    }
+    "contao-manager-plugin": "Rhyme\\IsotopeFeedsBundle\\ContaoManager\\Plugin"
   }
 }

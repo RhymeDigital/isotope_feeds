@@ -1,0 +1,3 @@
+rhyme_isofeeds:
+  resource: "@RhymeIsotopeFeedsBundle/Controller"
+  type:     annotation

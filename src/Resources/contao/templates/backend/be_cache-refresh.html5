@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="<?= $this->language ?>">
+<head>
+
+    <meta charset="<?= $this->charset ?>">
+    <title><?= $this->title ?> | <?= $this->host ?></title>
+    <base href="<?= $this->base ?>">
+    <meta name="generator" content="Contao Open Source CMS">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+
+    <link rel="stylesheet" href="<?php
+    $objCombiner = new Contao\Combiner();
+    $objCombiner->add('system/themes/'.$this->theme.'/fonts.min.css');
+    $objCombiner->add('system/themes/'.$this->theme.'/basic.min.css');
+    $objCombiner->add('system/themes/'.$this->theme.'/popup.min.css');
+    $objCombiner->add('bundles/rhymeisotopefeeds/assets/css/isotope-feeds.css');
+    echo $objCombiner->getCombinedFile();
+    ?>">
+    <?= $this->stylesheets ?>
+
+    <script><?= $this->getLocaleString() ?></script>
+    <script>var REQUEST_TOKEN = '<?= $this->rt; ?>';</script>
+    <script src="<?php
+    $objCombiner = new Contao\Combiner();
+    $objCombiner->add('assets/mootools/js/mootools.min.js');
+    $objCombiner->add('bundles/contaocore/mootao.min.js');
+    $objCombiner->add('bundles/contaocore/core.min.js');
+    $objCombiner->add('bundles/rhymeisotopefeeds/assets/js/isotope-feeds.js');
+    echo $objCombiner->getCombinedFile();
+    ?>"></script>
+
+    <script><?= $this->getDateString() ?></script>
+    <?= $this->javascripts ?>
+
+</head>
+<body class="<?= $this->ua ?> w250 popup">
+
+<div id="container">
+    <main id="main">
+
+<h1 class="main_headline"><?php echo $this->headline; ?></h1>
+<?php if ($this->error): ?>
+
+<p class="tl_gerror"><?php echo $this->error; ?></p>
+<?php endif; ?>
+
+<div id="refresh-cache">
+	<input type="submit" name="clear" id="clear" class="tl_submit" value="<?php echo $this->importSubmit; ?>" onclick="RefreshCache.startRefresh(this, 0, '<?php echo $this->startMsg; ?>', '<?php echo $this->endMsg; ?>'); return false;" />
+</div>
+
+</main>
+</div>
+
+</body>
+</html>
