@@ -33,7 +33,7 @@ class Rss20 extends ContaoFeedItem
 		$xml .= '<title>' . StringUtil::specialchars($this->title) . '</title>';
 		$xml .= '<description><![CDATA[' . preg_replace('/[\n\r]+/', ' ', $this->description) . ']]></description>';
 		$xml .= '<link>' . StringUtil::specialchars($this->link) . '</link>';
-		$xml .= '<pubDate>' . date('r', $this->published) . '</pubDate>';
+		$xml .= '<pubDate>' . date('r', (int) $this->published) . '</pubDate>';
 		$xml .= '<guid>' . ($this->guid ?: StringUtil::specialchars($this->link)) . '</guid>';
 
 		// Enclosures
