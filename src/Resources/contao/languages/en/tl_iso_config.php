@@ -20,6 +20,7 @@ $GLOBALS['TL_LANG']['tl_iso_config']['feedTitle']						= array('Feed Base Title'
 $GLOBALS['TL_LANG']['tl_iso_config']['feedDesc']						= array('Feed Base Description', 'Add the description of the base feed link.');
 $GLOBALS['TL_LANG']['tl_iso_config']['feedJumpTo']						= array('Feed Reader Page', 'Add the URL of the reader page to generate a link.');
 $GLOBALS['TL_LANG']['tl_iso_config']['feedTypes']						= array('Feed Types', 'Select the types of feeds to generate.');
+$GLOBALS['TL_LANG']['tl_iso_config']['feedLanguage']				    = array('Feed Language', 'Select the language to set on the feed.');
 
 
 

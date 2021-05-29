@@ -16,12 +16,14 @@ $GLOBALS['ISO_FEEDS'] = array
 	'googlebase' => array
 	(
 		'feed'	=> array('Rhyme\IsotopeFeedsBundle\Feed\GoogleMerchant', 'generate'),
-		'item'	=> 'Rhyme\IsotopeFeedsBundle\FeedItem\GoogleMerchant'
+		'item'	=> 'Rhyme\IsotopeFeedsBundle\FeedItem\GoogleMerchant',
+        'format'=> 'rss',
 	),
 	'rss20'		 => array
 	(
 		'feed'	=> array('Rhyme\IsotopeFeedsBundle\Feed\Rss20', 'generate'),
-		'item'	=> 'Rhyme\IsotopeFeedsBundle\FeedItem\Rss20'
+		'item'	=> 'Rhyme\IsotopeFeedsBundle\FeedItem\Rss20',
+        'format'=> 'rss',
 	),
 );
 

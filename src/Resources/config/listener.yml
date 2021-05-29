@@ -1,0 +1,8 @@
+services:
+  rhyme_isofeeds.listener.generate_page:
+    class: Rhyme\IsotopeFeedsBundle\EventListener\GeneratePageListener
+    arguments:
+      - '@contao.framework'
+    tags:
+      - { name: contao.hook, hook: generatePage }
+    public: true

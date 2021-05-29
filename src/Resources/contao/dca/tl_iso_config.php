@@ -11,10 +11,13 @@ declare(strict_types=1);
 /**
  * Table tl_iso_config
  */
+
+use Contao\System;
+
 $GLOBALS['TL_DCA']['tl_iso_config']['config']['onsubmit_callback'][] = array('Rhyme\IsotopeFeedsBundle\Helper\IsotopeFeeds', 'generateFeeds');
 $GLOBALS['TL_DCA']['tl_iso_config']['palettes']['__selector__'][] = 'addFeed';
 $GLOBALS['TL_DCA']['tl_iso_config']['palettes']['default'] = str_replace('{analytics_legend}', '{feed_legend},addFeed;{images_legend}', $GLOBALS['TL_DCA']['tl_iso_config']['palettes']['default']);
-$GLOBALS['TL_DCA']['tl_iso_config']['subpalettes']['addFeed'] = 'feedTypes,feedName,feedBase,feedTitle,feedDesc,feedJumpTo';
+$GLOBALS['TL_DCA']['tl_iso_config']['subpalettes']['addFeed'] = 'feedTypes,feedName,feedBase,feedLanguage,feedTitle,feedDesc,feedJumpTo';
 
 
 // Fields
@@ -79,4 +82,22 @@ $GLOBALS['TL_DCA']['tl_iso_config']['fields']['feedJumpTo'] = array
 	'inputType'				  => 'pageTree',
 	'eval'					  => array('fieldType'=>'radio', 'tl_class'=>'clr'),
 	'sql'                     => "int(10) unsigned NOT NULL default '0'"
+);
+
+$GLOBALS['TL_DCA']['tl_iso_config']['fields']['feedLanguage'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_config']['feedLanguage'],
+    'default'                 => str_replace('-', '_', System::getContainer()->get('request_stack')->getCurrentRequest()->getLocale()),
+    'exclude'                 => true,
+    'filter'                  => true,
+    'inputType'               => 'select',
+    'eval'                    => array('rgxp'=>'locale', 'tl_class'=>'w50'),
+    'load_callback'           => array(
+        array('Rhyme\IsotopeFeedsBundle\Backend\IsotopeConfig\FeedCallbacks', 'setDefaultLanguage'),
+    ),
+    'options_callback' => static function ()
+    {
+        return System::getLanguages(true);
+    },
+    'sql'                     => "varchar(5) NOT NULL default ''"
 );

@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace Rhyme\IsotopeFeedsBundle\Backend\IsotopeConfig;
 
 use Contao\Backend;
+use Contao\DataContainer;
+use Contao\System;
 
 
 /**
@@ -46,5 +48,20 @@ class FeedCallbacks extends Backend
 		}
 		return $return;
 	}
+
+    /**
+     * Update the default value
+     * @param $varValue
+     * @param DataContainer $dc
+     * @return mixed
+     */
+	public function setDefaultLanguage($varValue, DataContainer $dc) {
+        if($varValue === null || $varValue === '')
+        {
+            $locale = System::getContainer()->get('request_stack')->getCurrentRequest()->getLocale();
+            $varValue = $locale;
+        }
+        return $varValue;
+    }
 
 }
