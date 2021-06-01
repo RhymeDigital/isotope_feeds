@@ -87,7 +87,7 @@ $GLOBALS['TL_DCA']['tl_iso_config']['fields']['feedJumpTo'] = array
 $GLOBALS['TL_DCA']['tl_iso_config']['fields']['feedLanguage'] = array
 (
     'label'                   => &$GLOBALS['TL_LANG']['tl_iso_config']['feedLanguage'],
-    'default'                 => str_replace('-', '_', System::getContainer()->get('request_stack')->getCurrentRequest()->getLocale()),
+    'default'                 => str_replace('-', '_', $GLOBALS['TL_LANGUAGE']),
     'exclude'                 => true,
     'filter'                  => true,
     'inputType'               => 'select',
