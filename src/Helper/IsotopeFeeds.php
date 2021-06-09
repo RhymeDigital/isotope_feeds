@@ -288,6 +288,9 @@ class IsotopeFeeds extends Controller
 	 */
 	public function generateProductXML($feedFile, Product $objProduct, $objConfig)
 	{
+	    //Refresh all data from the database
+        $objProduct->refresh();
+
 		$time = time();
 		$strType = static::getTypeFromFeedFile($objConfig, $feedFile);
 		$arrFeedClass = $GLOBALS['ISO_FEEDS'][$strType];

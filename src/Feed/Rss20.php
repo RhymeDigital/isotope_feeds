@@ -68,7 +68,7 @@ class Rss20 extends ContaoFeed
 		$xml .= '<language>' . $this->language . '</language>';
 		$xml .= '<pubDate>' . date('r', (int) $this->published) . '</pubDate>';
 		$xml .= '<generator>Contao Open Source CMS</generator>';
-		$xml .= '<atom:link href="' . StringUtil::specialchars($this->Environment->base . $this->strName) . '.xml" rel="self" type="application/rss+xml" />';
+		$xml .= '<atom:link href="' . StringUtil::specialchars($this->Environment->base . $this->strName) . '" rel="self" type="application/rss+xml" />';
 
 		foreach ($this->arrFiles as $objFile)
 		{

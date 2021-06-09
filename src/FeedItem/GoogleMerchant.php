@@ -28,16 +28,6 @@ class GoogleMerchant extends Rss20
 	 */
 	public function cache($strLocation)
 	{
-		//double-check: if we do not have two out of 3 unique identifiers, delete cache b/c it is invalid
-		if((!$this->condition || !$this->availability || !$this->brand) || (!strlen($this->gtin) && !strlen($this->mpn))) 
-        {
-			if(is_file(TL_ROOT . '/' . $strLocation)) 
-			{
-				\Files::getInstance()->delete($strLocation);
-			}
-			return;
-		}
-
 		$arrGoogleFields = array
 		(
 			'id',
@@ -61,6 +51,11 @@ class GoogleMerchant extends Rss20
 			'gender',
 			'age_group',
 		);
+
+		if(!strlen($this->gtin)) {
+		    $this->identifier_exists = 'no';
+            $arrGoogleFields[] = 'identifier_exists';
+        }
 		
 		
 		$xml = '	<item>' . "\n";
