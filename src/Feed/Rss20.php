@@ -10,8 +10,11 @@ declare(strict_types=1);
 
 namespace Rhyme\IsotopeFeedsBundle\Feed;
 
+use Contao\Controller;
+use Contao\Environment;
 use Contao\Feed as ContaoFeed;
 use Contao\StringUtil;
+use Contao\System;
 
 /**
  * Creates a RSS 2.0 compatible feed
@@ -59,16 +62,19 @@ class Rss20 extends ContaoFeed
 	{
 		$this->adjustPublicationDate();
 
+		$publicDir = StringUtil::stripRootDir(System::getContainer()->getParameter('contao.web_dir'));
+		$link = Environment::get('base') . str_replace($publicDir . '/', '', $this->strName);
+
 		$xml  = '<?xml version="1.0" encoding="' . $GLOBALS['TL_CONFIG']['characterSet'] . '"?>';
 		$xml .= '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">';
 		$xml .= '<channel>';
 		$xml .= '<title>' . StringUtil::specialchars($this->title) . '</title>';
 		$xml .= '<description>' . StringUtil::specialchars($this->description) . '</description>';
-		$xml .= '<link>' . StringUtil::specialchars($this->link) . '</link>';
+		$xml .= '<link>' . StringUtil::specialchars($link) . '</link>';
 		$xml .= '<language>' . $this->language . '</language>';
 		$xml .= '<pubDate>' . date('r', (int) $this->published) . '</pubDate>';
 		$xml .= '<generator>Contao Open Source CMS</generator>';
-		$xml .= '<atom:link href="' . StringUtil::specialchars($this->Environment->base . $this->strName) . '" rel="self" type="application/rss+xml" />';
+		$xml .= '<atom:link href="' . StringUtil::specialchars($link) . '" rel="self" type="application/rss+xml" />';
 
 		foreach ($this->arrFiles as $objFile)
 		{
