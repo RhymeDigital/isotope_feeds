@@ -8,10 +8,18 @@ declare(strict_types=1);
  * @license LGPL-3.0+
  */
 
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
+
 /**
  * Palettes
  */
-$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace('calendarfeeds','calendarfeeds,productfeeds',$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
+
+// Extend default palette
+PaletteManipulator::create()
+    ->addLegend('feed_legend', 'modules_legend', PaletteManipulator::POSITION_BEFORE)
+    ->addField('productfeeds', 'feed_legend', PaletteManipulator::POSITION_APPEND)
+    ->applyToPalette('default', 'tl_layout')
+;
 
 /**
  * Fields
