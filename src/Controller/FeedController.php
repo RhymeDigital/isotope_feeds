@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Rhyme\IsotopeFeedsBundle\Controller;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCache;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +23,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FeedController extends AbstractController
 {
+    private ContaoFramework $framework;
+
+    public function __construct(ContaoFramework $framework)
+    {
+        $this->framework = $framework;
+    }
 
     /**
      * Handles caching the product XML
@@ -32,14 +39,11 @@ class FeedController extends AbstractController
      */
     public function feedCacheAction()
     {
-        if ($this->container->has('contao.framework')) {
-            $this->container->get('contao.framework')->initialize();
-        }
+        $this->framework->initialize();
 
         $controller = new FeedCache();
 
         return new Response($controller->run());
-
     }
 
 }
