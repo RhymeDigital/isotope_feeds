@@ -1,0 +1,5 @@
+services:
+    Rhyme\IsotopeFeedsBundle\Controller\FeedController:
+        public: true
+        arguments:
+            - '@contao.framework'
