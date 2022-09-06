@@ -374,7 +374,22 @@ class IsotopeFeeds extends Controller
 			$objItem->brand = $objProduct->gid_brand;
 			$objItem->gtin = $objProduct->gid_gtin;
 			$objItem->mpn = $objProduct->gid_mpn;
-			$objItem->google_product_category = (($objGT = GoogleTaxonomy::findByPk($objProduct->gid_google_product_category))==false ) ? '' : $objGT->fullname;
+
+            //Additional settings
+            $objItem->color = $objProduct->gid_color;
+            $objItem->material = $objProduct->gid_material;
+            $objItem->pattern = $objProduct->gid_pattern;
+
+            //Shipping settings
+            $defaultShippingArr = StringUtil::deserialize($objProduct->shipping_weight, true);
+            $googleShippingArr = StringUtil::deserialize($objProduct->gid_shipping_weight, true);
+            $defaultShipping = $defaultShippingArr['value'] . ' ' . $defaultShippingArr['unit'];
+            $googleShipping = $googleShippingArr['value'] . ' ' . $googleShippingArr['unit'];
+            $objItem->shipping_weight = strlen(trim($googleShipping)) ? $googleShipping : (strlen(trim($defaultShipping)) ? $defaultShipping : false);
+
+            $objGT = GoogleTaxonomy::findByPk($objProduct->gid_google_product_category);
+            $productCategory = strlen($objProduct->gid_google_product_category_manual) ? $objProduct->gid_google_product_category_manual : ($objGT ? $objGT->fullname : '');
+			$objItem->google_product_category = $productCategory;
 			
 			//Google variants only
 			if($objProduct->pid>0)
@@ -383,7 +398,8 @@ class IsotopeFeeds extends Controller
 			}
 			
 			//Custom product category taxomony
-			$objItem->product_type = StringUtil::deserialize($objProduct->gid_product_type);
+            $productType = StringUtil::deserialize($objProduct->gid_product_type);
+			$objItem->product_type = strlen($objProduct->gid_product_type_manual) ? $objProduct->gid_product_type_manual : $productType;
 			
 			//HOOK for other data that needs to be added
 			if (isset($GLOBALS['ISO_HOOKS']['feedItem']) && is_array($GLOBALS['ISO_HOOKS']['feedItem']))

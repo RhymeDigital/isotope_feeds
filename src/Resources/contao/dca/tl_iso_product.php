@@ -55,7 +55,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_condition'] = array
 	'default'				  => 'new',
 	'inputType'               => 'select',
 	'options'				  => array('new','used','refurbished'),
-	'save_callback'			  => array(array('Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCallbacks', 'checkGoogle')),
+	//'save_callback'			  => array(array('Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCallbacks', 'checkGoogle')),
 	'eval'                    => array('tl_class'=>'w50'),
 	'reference'				  => &$GLOBALS['TL_LANG']['tl_iso_product']['gid'],
 	'attributes'			  => array('legend'=>'feed_legend:hide', 'fixed'=>true),
@@ -69,7 +69,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_availability'] = array
 	'default'				  => 'in stock',
 	'inputType'               => 'select',
 	'options'				  => array('in stock','available for order','out of stock','preorder'),
-	'save_callback'			  => array(array('Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCallbacks', 'checkGoogle')),
+	//'save_callback'			  => array(array('Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCallbacks', 'checkGoogle')),
 	'eval'                    => array('tl_class'=>'w50'),
 	'reference'				  => &$GLOBALS['TL_LANG']['tl_iso_product'],
 	'attributes'			  => array('legend'=>'feed_legend:hide', 'fixed'=>true),
@@ -81,7 +81,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_brand'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_brand'],
 	'exclude'                 => true,
 	'inputType'               => 'text',
-	'save_callback'			  => array(array('Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCallbacks', 'checkGoogle')),
+	//'save_callback'			  => array(array('Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCallbacks', 'checkGoogle')),
 	'eval'                    => array('tl_class'=>'w50'),
 	'attributes'			  => array('legend'=>'feed_legend:hide', 'fixed'=>true),
 	'sql'                     => "varchar(255) NOT NULL default ''"
@@ -111,7 +111,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_google_product_category'] = 
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_google_product_category'],
 	'exclude'                 => true,
- 	'inputType' 		      => 'tableTree',
+ 	'inputType' 		      => 'pct_tabletree',
  	'eval'      		      => array(
  		'fieldType' 		      => 'radio',
  		'tableColumn'		      => 'tl_google_taxonomy.name',
@@ -120,7 +120,7 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_google_product_category'] = 
  		'childrenOnly'		      => false,
  		'tl_class'			      => 'clr',
  	),
- 	'attributes'			  => array('legend'=>'feed_legend:hide', 'fixed'=>true),
+ 	'attributes'			  => array('legend'=>'feed_legend:hide'),
  	'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
 
@@ -129,10 +129,73 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_product_type'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_product_type'],
 	'exclude'                 => true,
 	'inputType'               => 'listWizard',
-	'save_callback'			  => array(array('Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCallbacks', 'checkGoogle')),
+	//'save_callback'			  => array(array('Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCallbacks', 'checkGoogle')),
 	'eval'                    => array('allowHtml'=>true, 'tl_class' => 'clr m12'),
-	'attributes'			  => array('legend'=>'feed_legend:hide', 'fixed'=>true),
+	'attributes'			  => array('legend'=>'feed_legend:hide'),
 	'sql'                     => "blob NULL"
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_color'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_color'],
+    'exclude'                 => true,
+    'inputType'               => 'text',
+    'eval'                    => array('tl_class'=>'w50'),
+    'attributes'			  => array('legend'=>'feed_legend:hide'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_material'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_material'],
+    'exclude'                 => true,
+    'inputType'               => 'text',
+    'eval'                    => array('tl_class'=>'w50'),
+    'attributes'			  => array('legend'=>'feed_legend:hide'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_pattern'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_pattern'],
+    'exclude'                 => true,
+    'inputType'               => 'text',
+    'eval'                    => array('tl_class'=>'w50'),
+    'attributes'			  => array('legend'=>'feed_legend:hide'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_shipping_weight'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_shipping_weight'],
+    'exclude'               => true,
+    'inputType'             => 'timePeriod',
+    'default'               => array('unit'=>'kg'),
+    'options'               => array('g', 'kg', 'oz', 'lb',),
+    'reference'             => &$GLOBALS['TL_LANG']['WGT'],
+    'eval'                  => array('rgxp'=>'digit', 'tl_class'=>'w50', 'helpwizard'=>true),
+    'attributes'            => array('legend'=>'feed_legend:hide'),
+    'sql'                   => "varchar(255) NOT NULL default ''",
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_google_product_category_manual'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_google_product_category_manual'],
+    'exclude'                 => true,
+    'inputType'               => 'text',
+    'eval'                    => array('tl_class'=>'w50'),
+    'attributes'			  => array('legend'=>'feed_legend:hide'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_product_type_manual'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_product_type_manual'],
+    'exclude'                 => true,
+    'inputType'               => 'text',
+    'eval'                    => array('tl_class'=>'w50'),
+    'attributes'			  => array('legend'=>'feed_legend:hide'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_description'] = array
