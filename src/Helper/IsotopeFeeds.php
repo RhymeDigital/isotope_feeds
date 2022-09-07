@@ -381,6 +381,7 @@ class IsotopeFeeds extends Controller
             $objItem->pattern = $objProduct->gid_pattern;
 
             //Shipping settings
+            $objItem->shipping_label = $objProduct->gid_shipping_label;
             $defaultShippingArr = StringUtil::deserialize($objProduct->shipping_weight, true);
             $googleShippingArr = StringUtil::deserialize($objProduct->gid_shipping_weight, true);
             $defaultShipping = $defaultShippingArr['value'] . ' ' . $defaultShippingArr['unit'];
@@ -388,7 +389,7 @@ class IsotopeFeeds extends Controller
             $objItem->shipping_weight = strlen(trim($googleShipping)) ? $googleShipping : (strlen(trim($defaultShipping)) ? $defaultShipping : false);
 
             $objGT = GoogleTaxonomy::findByPk($objProduct->gid_google_product_category);
-            $productCategory = strlen($objProduct->gid_google_product_category_manual) ? $objProduct->gid_google_product_category_manual : ($objGT ? $objGT->fullname : '');
+            $productCategory = strlen(($objProduct->gid_google_product_category_manual ?? '')) ? $objProduct->gid_google_product_category_manual : ($objGT ? $objGT->fullname : '');
 			$objItem->google_product_category = $productCategory;
 			
 			//Google variants only
@@ -397,9 +398,9 @@ class IsotopeFeeds extends Controller
 				$objItem->item_group_id = strlen($objProduct->sku) ? $objProduct->sku : $objProduct->alias;
 			}
 			
-			//Custom product category taxomony
+			//Custom product category taxonomy
             $productType = StringUtil::deserialize($objProduct->gid_product_type);
-			$objItem->product_type = strlen($objProduct->gid_product_type_manual) ? $objProduct->gid_product_type_manual : $productType;
+			$objItem->product_type = strlen(($objProduct->gid_product_type_manual ?? '')) ? $objProduct->gid_product_type_manual : $productType;
 			
 			//HOOK for other data that needs to be added
 			if (isset($GLOBALS['ISO_HOOKS']['feedItem']) && is_array($GLOBALS['ISO_HOOKS']['feedItem']))

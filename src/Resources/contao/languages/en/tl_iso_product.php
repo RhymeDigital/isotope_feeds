@@ -28,6 +28,7 @@ $GLOBALS['TL_LANG']['tl_iso_product']['gid_description'] = array('Google Product
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_color'] = array('Google Product Color', 'Please enter a color for this product in the Google Feed.');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_material'] = array('Google Product Material', 'Please enter a material for this product in the Google Feed.');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_pattern'] = array('Google Product Pattern', 'Please enter a pattern for this product in the Google Feed.');
+$GLOBALS['TL_LANG']['tl_iso_product']['gid_shipping_label'] = array('Google Product Shipping Label', 'Please enter a shipping label for this product in the Google Feed.');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_shipping_weight'] = array('Google Product Shipping Weight', 'Please enter a shipping weight for this product in the Google Feed.');
 
 /**

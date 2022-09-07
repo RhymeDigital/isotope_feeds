@@ -165,6 +165,16 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_pattern'] = array
     'sql'                     => "varchar(255) NOT NULL default ''"
 );
 
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_shipping_label'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_shipping_label'],
+    'exclude'                 => true,
+    'inputType'               => 'text',
+    'eval'                    => array('tl_class'=>'w50'),
+    'attributes'			  => array('legend'=>'feed_legend:hide'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
+);
+
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_shipping_weight'] = array
 (
     'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_shipping_weight'],
