@@ -45,6 +45,11 @@ class IsotopeFeeds extends Controller
      */
     protected static $arrXMLDirCache = array();
 
+	public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
 	 * Return a feed name from a config
 	 * @param mixed \Isotope\Model\Config or Contao\DatabaseResult
