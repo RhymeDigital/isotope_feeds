@@ -44,6 +44,8 @@ class GoogleMerchant extends Rss20
 			'sale_price',
 			'sale_price_effective_date',
 			'item_group_id',
+            'shipping_label',
+            'shipping_weight',
 			'color',
 			'material',
 			'pattern',

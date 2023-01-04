@@ -29,8 +29,8 @@ $GLOBALS['ISO_FEEDS'] = array
 
 if (TL_MODE == 'BE')
 {
-	$GLOBALS['TL_CSS'][] = 'web/bundles/rhymeisotopefeeds/assets/css/isotope-feeds.css|static';
-	$GLOBALS['TL_JAVASCRIPT'][] = 'web/bundles/rhymeisotopefeeds/assets/js/isotope-feeds.js|static';
+	$GLOBALS['TL_CSS'][] = 'bundles/rhymeisotopefeeds/assets/css/isotope-feeds.css|static';
+	$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/rhymeisotopefeeds/assets/js/isotope-feeds.js|static';
 }
 
 
