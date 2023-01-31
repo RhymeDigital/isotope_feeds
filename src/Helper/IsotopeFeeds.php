@@ -371,7 +371,9 @@ class IsotopeFeeds extends Controller
 			//Sku, price, etc
 			$objItem->id = $objProduct->id;
 			$objItem->sku = ($objProduct->sku && strlen($objProduct->sku)) ? $objProduct->sku : $objProduct->alias;
-			$objItem->price = Isotope::formatPriceWithCurrency($objProduct->getPrice(Isotope::getCart())->getAmount(), false);
+            if($objProduct->getPrice()) {
+                $objItem->price = Isotope::formatPriceWithCurrency($objProduct->getPrice(Isotope::getCart())->getAmount(), false);
+            }
 
 			//Google basic settings
 			$objItem->condition = $objProduct->gid_condition;
