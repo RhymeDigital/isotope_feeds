@@ -336,7 +336,10 @@ class IsotopeFeeds extends Controller
 				}
 				
 				//Do not run the parent and delete the cache file if it exists
-				\Files::getInstance()->delete($strCacheFile);
+                if(is_file(TL_ROOT . '/' . $strCacheFile))
+                {
+                    \Files::getInstance()->delete($strCacheFile);
+                }
 				return;
 			}
 			
