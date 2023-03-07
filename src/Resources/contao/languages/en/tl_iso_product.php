@@ -15,6 +15,7 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_iso_product']['useFeed'] 				= array('Use in Feed', 'Check this box if you wish to set and use this product data in feeds.');
+$GLOBALS['TL_LANG']['tl_iso_product']['feedJumpTo'] 			= array('Feed Reader Page', 'If you want to select a custom reader page URL for this product\'s feed, select it here.');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_condition'] 		= array('Condition', 'Please enter the condition of the product.');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_availability'] 		= array('Availability', 'Please enter the availability of the product.');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_brand'] 			= array('Brand', 'Please enter the brand/manufacturer of the product. Not required for custom products, books, or media, or if you are providing a GTIN and MPN.');

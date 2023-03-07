@@ -47,6 +47,15 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['useFeed'] = array
 	'attributes'			  => array('legend'=>'feed_legend:hide', 'fixed'=>true, 'variant_fixed'=>true),
 	'sql'                     => "char(1) NOT NULL default ''"
 );
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['feedJumpTo'] = array
+(
+    'label'					  => &$GLOBALS['TL_LANG']['tl_iso_product']['feedJumpTo'],
+    'inputType'				  => 'pageTree',
+    'eval'					  => array('fieldType'=>'radio', 'tl_class'=>'clr'),
+    'attributes'			  => array('legend'=>'feed_legend:hide', 'fixed'=>true),
+    'sql'                     => "int(10) unsigned NOT NULL default '0'"
+);
  
 $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_condition'] = array
 (
