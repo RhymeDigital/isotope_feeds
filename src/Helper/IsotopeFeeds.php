@@ -250,7 +250,8 @@ class IsotopeFeeds extends Controller
 		$objFeed->link = $strLink;
 		$objFeed->title = $objConfig->feedTitle;
 		$objFeed->description = $objConfig->feedDesc;
-		$objFeed->language = $objConfig->feedLanguage ?: System::getContainer()->get('request_stack')->getCurrentRequest()->getLocale();
+        $request = System::getContainer()->get('request_stack')->getCurrentRequest();
+		$objFeed->language = $objConfig->feedLanguage ?: ($request ? $request->getLocale() : 'en');
 		$objFeed->published = time();
 		
 		$strDir = static::getFeedCacheBaseDir($objConfig) . '/' . $strType;
