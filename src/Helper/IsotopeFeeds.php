@@ -250,7 +250,8 @@ class IsotopeFeeds extends Controller
 		$objFeed->link = $strLink;
 		$objFeed->title = $objConfig->feedTitle;
 		$objFeed->description = $objConfig->feedDesc;
-		$objFeed->language = $objConfig->feedLanguage ?: System::getContainer()->get('request_stack')->getCurrentRequest()->getLocale();
+        $request = System::getContainer()->get('request_stack')->getCurrentRequest();
+		$objFeed->language = $objConfig->feedLanguage ?: ($request ? $request->getLocale() : 'en');
 		$objFeed->published = time();
 		
 		$strDir = static::getFeedCacheBaseDir($objConfig) . '/' . $strType;
@@ -311,9 +312,10 @@ class IsotopeFeeds extends Controller
 				$arrPages = \Database::getInstance()->getChildRecords($arrRoots, 'tl_page', false, $arrRoots);
 		}
 
-		// Get default URL
-		$intJumpTo = $objConfig->feedJumpTo;
-		if($intJumpTo=='')
+		// Get default URL - Check product first and if not fall back to config reader page
+        $intJumpTo = $objProduct->feedJumpTo ?: $objConfig->feedJumpTo;
+
+		if($intJumpTo == '')
 		{
 			//Get the first reader page we can find
 			$objModules = \Database::getInstance()->prepare("SELECT iso_reader_jumpTo FROM tl_module WHERE ".(count($arrPages)>0 ? "iso_reader_jumpTo IN (" . implode(',',$arrPages) . ") AND " : ''). "iso_reader_jumpTo !=''")->limit(1)->execute();
