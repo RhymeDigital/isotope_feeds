@@ -13,7 +13,6 @@ namespace Rhyme\IsotopeFeedsBundle\Controller;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Rhyme\IsotopeFeedsBundle\Backend\IsotopeProduct\FeedCache;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -21,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  * *
  * @Route("/isofeeds", defaults={"_scope" = "backend", "_token_check" = true})
  */
-class FeedController extends AbstractController
+class FeedController
 {
     private ContaoFramework $framework;
 
