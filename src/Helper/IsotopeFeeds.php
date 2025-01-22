@@ -77,7 +77,7 @@ class IsotopeFeeds extends Controller
 	 */
 	public static function getCacheDirectories($objConfig)
 	{
-    	if(!is_array(static::$arrXMLDirCache[$objConfig->id]))
+    	if(!is_array(static::$arrXMLDirCache[$objConfig->id] ?? null))
     	{
         	$arrFeedTypes = StringUtil::deserialize($objConfig->feedTypes, true);
     		foreach( $arrFeedTypes as $feedType )
@@ -107,7 +107,7 @@ class IsotopeFeeds extends Controller
 	 */
 	public static function getFeedFiles($objConfig)
 	{
-    	if(!is_array(static::$arrFeedCache[$objConfig->id]))
+    	if(!is_array(static::$arrFeedCache[$objConfig->id] ?? null))
     	{
         	static::$arrFeedCache[$objConfig->id] = array();
         	$strBase = static::getFeedBaseName($objConfig);
