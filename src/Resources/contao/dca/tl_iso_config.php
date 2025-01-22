@@ -12,11 +12,17 @@ declare(strict_types=1);
  * Table tl_iso_config
  */
 
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\System;
+
+PaletteManipulator::create()
+    ->addLegend('feed_legend', 'analytics_legend', PaletteManipulator::POSITION_BEFORE)
+    ->addField('addFeed', 'feed_legend', PaletteManipulator::POSITION_APPEND)
+    ->applyToPalette('default', 'tl_iso_config')
+;
 
 $GLOBALS['TL_DCA']['tl_iso_config']['config']['onsubmit_callback'][] = array('Rhyme\IsotopeFeedsBundle\Helper\IsotopeFeeds', 'generateFeeds');
 $GLOBALS['TL_DCA']['tl_iso_config']['palettes']['__selector__'][] = 'addFeed';
-$GLOBALS['TL_DCA']['tl_iso_config']['palettes']['default'] = str_replace('{analytics_legend}', '{feed_legend},addFeed;{images_legend}', $GLOBALS['TL_DCA']['tl_iso_config']['palettes']['default']);
 $GLOBALS['TL_DCA']['tl_iso_config']['subpalettes']['addFeed'] = 'feedTypes,feedName,feedBase,feedLanguage,feedTitle,feedDesc,feedJumpTo';
 
 
