@@ -71,8 +71,6 @@ class FeedCache extends Backend
             $this->objAjax->executePreActions();
         }
 
-        $this->Template->headline = $GLOBALS['TL_CONFIG']['websiteTitle'];
-
         $this->Template->rt = $container->get('contao.csrf.token_manager')->getToken($container->getParameter('contao.csrf_token_name'))->getValue();
 
         $this->Template->startMsg = 'Starting';
@@ -82,14 +80,11 @@ class FeedCache extends Backend
         $this->Template->theme = $this->getTheme();
         $this->Template->base = Environment::get('base');
         $this->Template->language = $GLOBALS['TL_LANGUAGE'];
-        $this->Template->title = $GLOBALS['TL_CONFIG']['websiteTitle'];
-        $this->Template->charset = $GLOBALS['TL_CONFIG']['characterSet'];
         $this->Template->pageOffset = $this->Input->cookie('BE_PAGE_OFFSET');
         $this->Template->error = ($this->Input->get('act') == 'error') ? $GLOBALS['TL_LANG']['ERR']['general'] : '';
         $this->Template->skipNavigation = $GLOBALS['TL_LANG']['MSC']['skipNavigation'];
         $this->Template->request = ampersand(Environment::get('request'));
         $this->Template->top = $GLOBALS['TL_LANG']['MSC']['backToTop'];
-        $this->Template->be27 = !$GLOBALS['TL_CONFIG']['oldBeTheme'];
         $this->Template->expandNode = $GLOBALS['TL_LANG']['MSC']['expandNode'];
         $this->Template->collapseNode = $GLOBALS['TL_LANG']['MSC']['collapseNode'];
 
