@@ -13,7 +13,15 @@ namespace Rhyme\IsotopeFeedsBundle\Helper;
 use Contao\Environment;
 use Contao\StringUtil;
 use Contao\Controller;
+use Contao\Database;
 use Contao\System;
+use Contao\Input;
+use Contao\File;
+use Contao\Files;
+use Contao\Folder;
+use Contao\FilesModel;
+use Contao\PageModel;
+use Contao\CoreBundle\Monolog\ContaoContext;
 use Isotope\Model\Config as IsoConfig;
 use Isotope\Interfaces\IsotopeProduct;
 use Isotope\Model\Product;
@@ -21,6 +29,8 @@ use Isotope\Model\ProductCollection\Cart;
 use Isotope\Isotope;
 use Rhyme\IsotopeFeedsBundle\Feed\Rss20;
 use Rhyme\IsotopeFeedsBundle\Model\GoogleTaxonomy;
+use Psr\Log\LogLevel;
+use Exception;
 
 /**
  * Preserves feeds
@@ -96,7 +106,7 @@ class IsotopeFeeds extends Controller
 	 */
 	public static function getTypeFromCacheDir($objConfig, $strDir)
 	{
-    	$arrTypes = array_flip(static::$arrXMLDirCache[$objConfig->id]);
+    	$arrTypes = \array_flip(static::$arrXMLDirCache[$objConfig->id]);
     	return $arrTypes[$strDir];
     }
 
@@ -107,7 +117,7 @@ class IsotopeFeeds extends Controller
 	 */
 	public static function getFeedFiles($objConfig)
 	{
-    	if(!is_array(static::$arrFeedCache[$objConfig->id] ?? null))
+    	if(!\is_array(static::$arrFeedCache[$objConfig->id] ?? null))
     	{
         	static::$arrFeedCache[$objConfig->id] = array();
         	$strBase = static::getFeedBaseName($objConfig);
@@ -157,15 +167,16 @@ class IsotopeFeeds extends Controller
         foreach($arrFeedFiles as $feedFile)
         {
 			// Delete XML file
-    		if (\Input::get('act') == 'delete')
+    		if (Input::get('act') == 'delete')
     		{
-			    \Files::getInstance()->delete($feedFile);
+			    Files::getInstance()->delete($feedFile);
 		    }
 		    //Update
 		    else
 		    {
 			    $this->generateFile($objConfig, $feedFile);
-                \System::log('Generated product feed ' . $feedFile, __METHOD__, TL_CRON);
+				$logger = static::getContainer()->get('monolog.logger.contao');
+				$logger->log(LogLevel::INFO, 'Generated product feed ' . $feedFile, array('contao' => new ContaoContext(__METHOD__, ContaoContext::CRON)));
 		    }
 		}
 	}
@@ -191,7 +202,8 @@ class IsotopeFeeds extends Controller
 			foreach( $arrFeedFiles as $feedFile)
 			{
 				$this->generateFile($objConfig, $feedFile);
-				\System::log('Generated product feed ' . $feedFile, __METHOD__, TL_CRON);
+				$logger = static::getContainer()->get('monolog.logger.contao');
+				$logger->log(LogLevel::INFO, 'Generated product feed ' . $feedFile, array('contao' => new ContaoContext(__METHOD__, ContaoContext::CRON)));
 			}
 		}
 	}
@@ -237,12 +249,13 @@ class IsotopeFeeds extends Controller
 		$arrType = $GLOBALS['ISO_FEEDS'][$strType]['feed'];
 		$time = time();
 		$strLink = $objConfig->feedBase != '' ? $objConfig->feedBase : Environment::get('base');
+		$projectDir = System::getContainer()->getParameter('kernel.project_dir');
 
 		try
 		{
 			$objFeed = new $arrType[0]($strFile);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			$objFeed = new Rss20($strFile);
 		}
@@ -256,9 +269,9 @@ class IsotopeFeeds extends Controller
 		
 		$strDir = static::getFeedCacheBaseDir($objConfig) . '/' . $strType;
 		
-		if(is_dir(TL_ROOT . '/' .  $strDir))
+		if(is_dir($projectDir . '/' .  $strDir))
 		{
-			$arrFiles = scan(TL_ROOT . '/' .  $strDir);
+			$arrFiles = Folder::scan($projectDir . '/' .  $strDir);
 			
 			//HOOK for other data that needs to be added and sorting the array
 			if (isset($GLOBALS['ISO_HOOKS']['feedFiles']) && is_array($GLOBALS['ISO_HOOKS']['feedFiles']))
@@ -272,16 +285,16 @@ class IsotopeFeeds extends Controller
 			
 			foreach($arrFiles as $file)
 			{
-				if(is_file(TL_ROOT  . '/' . $strDir . '/' . $file))
+				if(is_file($projectDir  . '/' . $strDir . '/' . $file))
 				{
-					$objFile = new \File($strDir . '/' . $file);
+					$objFile = new File($strDir . '/' . $file);
 					$objFeed->addFile($objFile);
 				}
 			}
-			
+
 			// Create file
-			$objFeedFile = new \File($strFile);
-			$objFeedFile->write($this->replaceInsertTags($objFeed->{$arrType[1]}()));
+			$objFeedFile = new File($strFile);
+			$objFeedFile->write(System::getContainer()->get('contao.insert_tag.parser')->replaceInline($objFeed->{$arrType[1]}()));
 			$objFeedFile->close();
 		}
 	}
@@ -297,19 +310,20 @@ class IsotopeFeeds extends Controller
 	    //Refresh all data from the database
         $objProduct->refresh();
 
-		$time = time();
+		$time = \time();
 		$strType = static::getTypeFromFeedFile($objConfig, $feedFile);
-		$arrFeedClass = $GLOBALS['ISO_FEEDS'][$strType];
-		$strLink = $objConfig->feedBase != '' ? $objConfig->feedBase : Environment::get('base');
+		$strLink = $objConfig->feedBase != '' ? $objConfig->feedBase : '';
 		$strCacheFile = 'isotope/cache/' . $objConfig->id . '/' .  $strType . '/' . $objProduct->alias . ($objProduct->pid > 0 ? '-' . $objProduct->id : '') . '.xml';
+		$projectDir = System::getContainer()->getParameter('kernel.project_dir');
 		
 		// Get root pages that belong to this store config.
 		$arrPages = array();
-		$objRoot = \PageModel::findBy(array("type='root'", "iso_config"), $objConfig->id);
+		$productCategories = \array_map('\intval', $objProduct->getCategories(true));
+		$objRoot = PageModel::findBy(array("type='root'", "iso_config"), $objConfig->id);
 		if(null !== $objRoot)
 		{
-				$arrRoots = $objRoot->fetchEach('id');
-				$arrPages = \Database::getInstance()->getChildRecords($arrRoots, 'tl_page', false, $arrRoots);
+			$arrRoots = $objRoot->fetchEach('id');
+			$arrPages = Database::getInstance()->getChildRecords($arrRoots, 'tl_page', false, $arrRoots);
 		}
 
 		// Get default URL - Check product first and if not fall back to config reader page
@@ -318,15 +332,16 @@ class IsotopeFeeds extends Controller
 		if($intJumpTo == '')
 		{
 			//Get the first reader page we can find
-			$objModules = \Database::getInstance()->prepare("SELECT iso_reader_jumpTo FROM tl_module WHERE ".(count($arrPages)>0 ? "iso_reader_jumpTo IN (" . implode(',',$arrPages) . ") AND " : ''). "iso_reader_jumpTo !=''")->limit(1)->execute();
+			$objModules = Database::getInstance()->prepare("SELECT iso_reader_jumpTo FROM tl_module WHERE ".(count($arrPages)>0 ? "iso_reader_jumpTo IN (" . implode(',',$arrPages) . ") AND " : ''). "iso_reader_jumpTo !=''")->limit(1)->execute();
 
 			if($objModules->numRows)
 			{
 				$intJumpTo = $objModules->iso_reader_jumpTo;
 			}
 		}
-		
-		if($objProduct->isPublished() && $objProduct->useFeed)
+
+		// Ensure the product is published, it's set to be in the feed, and it's been set to a category in one of the site roots for this config
+		if ($objProduct->isPublished() && $objProduct->useFeed && !empty(\array_intersect($productCategories, $arrPages)))
 		{
 			//Check for variants and run them instead if they exist
 			if($objProduct->hasVariants() && !$objProduct->isVariant())
@@ -338,9 +353,9 @@ class IsotopeFeeds extends Controller
 				}
 				
 				//Do not run the parent and delete the cache file if it exists
-                if(is_file(TL_ROOT . '/' . $strCacheFile))
+                if(is_file($projectDir . '/' . $strCacheFile))
                 {
-                    \Files::getInstance()->delete($strCacheFile);
+                    Files::getInstance()->delete($strCacheFile);
                 }
 				return;
 			}
@@ -349,16 +364,50 @@ class IsotopeFeeds extends Controller
 			{
 				$objItem = new $GLOBALS['ISO_FEEDS'][$strType]['item']();
 			}
-			catch (\Exception $e)
+			catch (Exception $e)
 			{
 				$objItem = new Rss20();
 			}
 
-			$strUrlKey = $objProduct->alias ?: ($objProduct->pid ?: $objProduct->id);
-
 			$objItem->title = $objProduct->name;
-			$objItem->link = $strLink . $objProduct->generateUrl(\PageModel::findByPk($intJumpTo));
-			$objItem->published = time();
+			$objItem->published = $time;
+
+			if (($jumpToPage = PageModel::findByPk($intJumpTo)) !== null) {
+				$jumpToPage->loadDetails();
+			}
+			$productUrl = $objProduct->generateUrl($jumpToPage);
+
+			// The product and page model generated an absolute URL!
+			if (\stripos($productUrl, 'http') === 0) {
+
+				// If no "Feed Base Link" was provided, just use the absolute URL that was generated
+				if (!$strLink) {
+					$objItem->link = $productUrl;
+
+					if ($jumpToPage !== null
+						&& \trim($jumpToPage->domain)
+						&& ($firstPageModel = PageModel::findFirstPublishedByPid($jumpToPage->rootId)) !== null
+					) {
+						$strLink = $firstPageModel->getFrontendUrl();
+					}
+				}
+				else
+				{
+					// Try to adjust the absolute URL so it uses the "Feed Base Link" provided in the store config
+					if ($jumpToPage !== null && ($domain = \trim($jumpToPage->domain))
+					) {
+						$objItem->link = $strLink . \substr($productUrl, \strpos($productUrl, $domain) + \strlen($domain) + 1);
+					}
+				}
+			}
+
+			// Fall back to the current domain if it's not set here
+			if (empty($strLink)) {
+				$strLink = Environment::get('base');
+			}
+			if (empty($objItem->link)) {
+				$objItem->link = $strLink . $productUrl;
+			}
 
 			// Prepare the description
 			if (null !== ($objType = $objProduct->getType()) &&
@@ -370,7 +419,7 @@ class IsotopeFeeds extends Controller
 			} else {
 			    $strDescription = $objProduct->description;
 			}
-			$strDescription = $this->replaceInsertTags($strDescription);
+			$strDescription = System::getContainer()->get('contao.insert_tag.parser')->replaceInline($strDescription);
 			$objItem->description = $this->convertRelativeUrls($strDescription, $strLink);
 
 			//Sku, price, etc
@@ -442,9 +491,9 @@ class IsotopeFeeds extends Controller
 		else
 		{
 			//Delete the cache file if it exists
-			if(is_file(TL_ROOT . '/' . $strCacheFile))
+			if(is_file($projectDir . '/' . $strCacheFile))
 			{
-				\Files::getInstance()->delete($strCacheFile);
+				Files::getInstance()->delete($strCacheFile);
 			}
 		}
 	}
@@ -459,6 +508,7 @@ class IsotopeFeeds extends Controller
 		$arrImages = array();
 		$intID = $objProduct->pid ? $objProduct->pid : $objProduct->id;
 		$varValue = StringUtil::deserialize($objProduct->images);
+		$projectDir = System::getContainer()->getParameter('kernel.project_dir');
 
 		if(is_array($varValue) && count($varValue))
 		{
@@ -471,7 +521,7 @@ class IsotopeFeeds extends Controller
                     $strFile = 'isotope/' . strtolower(substr($strFile, 0, 1)) . '/' . $strFile;
                 }
 
-                if (is_file(TL_ROOT . '/' . $strFile))
+                if (is_file($projectDir . '/' . $strFile))
                 {
                     $arrImages[] = $strLink . $strFile;
                 }
@@ -480,8 +530,8 @@ class IsotopeFeeds extends Controller
 
 		// No image available, add placeholder from store configuration
         if (empty($arrReturn)) {
-            $objPlaceholder = \FilesModel::findByPk($objConfig->placeholder);
-            if (null !== $objPlaceholder && is_file(TL_ROOT . '/' . $objPlaceholder->path)) {
+            $objPlaceholder = FilesModel::findByPk($objConfig->placeholder);
+            if (null !== $objPlaceholder && is_file($projectDir . '/' . $objPlaceholder->path)) {
                 $arrImages[] = $strLink . $objPlaceholder->path;
             }
         }
