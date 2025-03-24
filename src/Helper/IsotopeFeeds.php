@@ -419,7 +419,7 @@ class IsotopeFeeds extends Controller
 			} else {
 			    $strDescription = $objProduct->description;
 			}
-			$strDescription = System::getContainer()->get('contao.insert_tag.parser')->replaceInline($strDescription);
+			$strDescription = System::getContainer()->get('contao.insert_tag.parser')->replaceInline($strDescription ?? '');
 			$objItem->description = $this->convertRelativeUrls($strDescription, $strLink);
 
 			//Sku, price, etc
