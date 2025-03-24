@@ -221,20 +221,25 @@ class IsotopeFeeds extends Controller
         	return;
     	}
 
-		$objConfigs = IsoConfig::findBy('addFeed', '1');
-		foreach ($objConfigs as $objConfig)
+		if (($objConfigs = IsoConfig::findBy('addFeed', '1')) !== null)
 		{
-		    // Override shop configuration to generate correct price
-            $objCart = new Cart();
-            $objCart->config_id = $objConfig->id;
-            Isotope::setConfig($objConfig);
-            Isotope::setCart($objCart);
-
-			$arrFeedFiles = static::getFeedFiles($objConfig);
-			foreach( $arrFeedFiles as $feedFile )
+			while ($objConfigs->next())
 			{
-				$this->generateProductXML($feedFile, $objProduct, $objConfig);
+				$objConfig = $objConfigs->current();
+
+				// Override shop configuration to generate correct price
+				$objCart = new Cart();
+				$objCart->config_id = $objConfig->id;
+				Isotope::setConfig($objConfig);
+				Isotope::setCart($objCart);
+
+				$arrFeedFiles = static::getFeedFiles($objConfig);
+				foreach( $arrFeedFiles as $feedFile )
+				{
+					$this->generateProductXML($feedFile, $objProduct, $objConfig);
+				}
 			}
+			$objConfigs->reset();
 		}
 	}
 
