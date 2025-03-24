@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Rhyme\IsotopeFeedsBundle\Helper;
 
 use Contao\Environment;
+use Contao\Model;
 use Contao\StringUtil;
 use Contao\Controller;
 use Contao\Database;
@@ -62,7 +63,7 @@ class IsotopeFeeds extends Controller
 
     /**
 	 * Return a feed name from a config
-	 * @param mixed \Isotope\Model\Config or Contao\DatabaseResult
+	 * @param mixed $objConfig \Isotope\Model\Config or Contao\DatabaseResult
 	 * @return string
 	 */
 	public static function getFeedBaseName($objConfig)
@@ -72,7 +73,7 @@ class IsotopeFeeds extends Controller
 
     /**
 	 * Return the base feed cache dir from a config
-	 * @param mixed \Isotope\Model\Config or Contao\DatabaseResult
+	 * @param mixed $objConfig \Isotope\Model\Config or Contao\DatabaseResult
 	 * @return string
 	 */
 	public static function getFeedCacheBaseDir($objConfig)
@@ -82,7 +83,7 @@ class IsotopeFeeds extends Controller
 
     /**
 	 * Return the feed cache directories
-	 * @param mixed \Isotope\Model\Config or Contao\DatabaseResult
+	 * @param mixed $objConfig \Isotope\Model\Config or Contao\DatabaseResult
 	 * @return array
 	 */
 	public static function getCacheDirectories($objConfig)
@@ -101,7 +102,8 @@ class IsotopeFeeds extends Controller
 
     /**
 	 * Return the feed type from the feed file
-	 * @param string
+	 * @param mixed $objConfig
+	 * @param string $strDir
 	 * @return string
 	 */
 	public static function getTypeFromCacheDir($objConfig, $strDir)
@@ -112,7 +114,7 @@ class IsotopeFeeds extends Controller
 
     /**
 	 * Return an array of its feed files from a config
-	 * @param mixed \Isotope\Model\Config or Contao\DatabaseResult
+	 * @param mixed $objConfig \Isotope\Model\Config or Contao\DatabaseResult
 	 * @return array
 	 */
 	public static function getFeedFiles($objConfig)
@@ -136,7 +138,8 @@ class IsotopeFeeds extends Controller
 
     /**
 	 * Return the feed type from the feed file
-	 * @param string
+	 * @param mixed $objConfig \Isotope\Model\Config or Contao\DatabaseResult
+	 * @param string $strFile
 	 * @return string
 	 */
 	public static function getTypeFromFeedFile($objConfig, $strFile)
@@ -152,7 +155,7 @@ class IsotopeFeeds extends Controller
 
 	/**
 	 * Update a particular store config's RSS feeds
-	 * @param integer
+	 * @param integer $intId
 	 */
 	public function generateFeed($intId)
 	{
@@ -190,9 +193,7 @@ class IsotopeFeeds extends Controller
         $this->import('Automator');
         $this->Automator->purgeXmlFiles();
 
-		$objConfig = IsoConfig::findBy('addFeed', '1');
-
-		if (!$objConfig) {
+		if (($objConfig = IsoConfig::findBy('addFeed', '1')) === null) {
 			return;
 		}
 
@@ -206,12 +207,13 @@ class IsotopeFeeds extends Controller
 				$logger->log(LogLevel::INFO, 'Generated product feed ' . $feedFile, array('contao' => new ContaoContext(__METHOD__, ContaoContext::CRON)));
 			}
 		}
+		$objConfig->reset();
 	}
 	
 	
 	/**
 	 * Cache the product XML for each store config
-	 * @param \Isotope\Interfaces\IsotopeProduct
+	 * @param mixed $intId
 	 */
 	public function cacheProduct($intId)
 	{
@@ -245,8 +247,8 @@ class IsotopeFeeds extends Controller
 
 	/**
 	 * Generate an XML files and save them to the root directory
-	 * @param array
-	 * @param string
+	 * @param mixed $objConfig \Isotope\Model\Config or Contao\DatabaseResult
+	 * @param string $strFile
 	 */
 	protected function generateFile($objConfig, $strFile)
 	{
@@ -306,11 +308,12 @@ class IsotopeFeeds extends Controller
 
 	/**
 	 * Generate an XML file for a product and save it to the cache
-	 * @param string - feed file
-	 * @param \Isotope\Model\Product
-	 * @param \Isotope\Model\Config - store config
+	 *
+	 * @param string $feedFile - feed file
+	 * @param IsotopeProduct $objProduct
+	 * @param Model $objConfig - store config
 	 */
-	public function generateProductXML($feedFile, Product $objProduct, $objConfig)
+	public function generateProductXML($feedFile, IsotopeProduct $objProduct, $objConfig)
 	{
 	    //Refresh all data from the database
         $objProduct->refresh();
@@ -345,9 +348,13 @@ class IsotopeFeeds extends Controller
 			}
 		}
 
-		// Ensure the product is published, it's set to be in the feed, and it's been set to a category in one of the site roots for this config
-		if ($objProduct->isPublished() && $objProduct->useFeed && !empty(\array_intersect($productCategories, $arrPages)))
-		{
+		// Ensure the product is published, it's set to be in the feed, it has a price,
+		// and it's been set to a category in one of the site roots for this config.
+		if ($objProduct->isPublished()
+			&& $objProduct->useFeed
+			&& $objProduct->getPrice(Isotope::getCart()) !== null
+			&& !empty(\array_intersect($productCategories, $arrPages))
+		) {
 			//Check for variants and run them instead if they exist
 			if($objProduct->hasVariants() && !$objProduct->isVariant())
 			{
@@ -505,13 +512,14 @@ class IsotopeFeeds extends Controller
 
 	/**
 	 * Return an array of the product's original and/or watermarked images
-	 * @param Isotope\Interfaces\IsotopeProduct
+	 * @param IsotopeProduct $objProduct
+	 * @param mixed $objConfig
+	 * @param string $strLink
 	 * @return array
 	 */
 	protected static function getProductImages(IsotopeProduct $objProduct, $objConfig, $strLink)
 	{
 		$arrImages = array();
-		$intID = $objProduct->pid ? $objProduct->pid : $objProduct->id;
 		$varValue = StringUtil::deserialize($objProduct->images);
 		$projectDir = System::getContainer()->getParameter('kernel.project_dir');
 
