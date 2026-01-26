@@ -217,7 +217,7 @@ class IsotopeFeeds extends Controller
 	 */
 	public function cacheProduct($intId)
 	{
-    	$objProduct = Product::findPublishedByPk((int) $intId);
+    	$objProduct = Product::findByPk((int) $intId);
     	if(null === $objProduct)
     	{
         	return;
@@ -360,7 +360,7 @@ class IsotopeFeeds extends Controller
 			{
 				foreach($objProduct->getVariantIds() as $variantID)
 				{
-					$objVariant = Product::findPublishedByPk($variantID);
+					$objVariant = Product::findByPk($variantID);
 					$this->generateProductXML($feedFile, $objVariant, $objConfig);
 				}
 				
