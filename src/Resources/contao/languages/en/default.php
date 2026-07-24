@@ -3,7 +3,7 @@
 /**
  * Isotope Feeds - Create RSS and other feeds from Isotope Products
  *
- * @copyright  Rhyme.Digital 2015, Winans Creative 2009, Intelligent Spark 2010, iserv.ch GmbH 2010
+ * @copyright  Rhyme.Digital 2026, Winans Creative 2009, Intelligent Spark 2010, iserv.ch GmbH 2010
  *
  * @package    Isotope_Feeds
  * @link       http://rhyme.digital

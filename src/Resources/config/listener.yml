@@ -6,3 +6,11 @@ services:
     tags:
       - { name: contao.hook, hook: generatePage }
     public: true
+
+  rhyme_isofeeds.listener.truncate_google_feed_item_data_event:
+    class: Rhyme\IsotopeFeedsBundle\EventListener\TruncateGoogleFeedItemDataListener
+    arguments:
+      - '@contao.framework'
+    tags:
+      - { name: 'kernel.event_listener', event: rhyme_isofeeds.truncate_google_feed_item_data_event, priority: 0 }
+    public: true
