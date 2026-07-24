@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Rhyme Isotope Feeds Bundle
- * Copyright (c) 2021 Rhyme.Digital
+ * Copyright (c) 2026 Rhyme.Digital
  * @license LGPL-3.0+
  */
 
@@ -34,12 +34,7 @@ use Psr\Log\LogLevel;
 use Exception;
 
 /**
- * Preserves feeds
- *
- * @copyright  Rhyme Digital 2015
- * @author     Blair Winans <blair@rhyme.digital>
- * @author     Adam Fisher <adam@rhyme.digital>
- * @package    Isotope_Feeds
+ * Feed helper class
  */
 class IsotopeFeeds extends Controller
 {
