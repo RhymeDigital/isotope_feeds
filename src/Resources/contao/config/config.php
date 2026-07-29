@@ -7,45 +7,53 @@ declare(strict_types=1);
  * Copyright (c) 2026 Rhyme.Digital
  * @license LGPL-3.0+
  */
+namespace {
 
-/**
- * Isotope Feeds
- */
-$GLOBALS['ISO_FEEDS'] = array
-(
-	'googlebase' => array
-	(
-		'feed'	=> array('Rhyme\IsotopeFeedsBundle\Feed\GoogleMerchant', 'generate'),
-		'item'	=> 'Rhyme\IsotopeFeedsBundle\FeedItem\GoogleMerchant',
-        'format'=> 'rss',
-	),
-	'rss20'		 => array
-	(
-		'feed'	=> array('Rhyme\IsotopeFeedsBundle\Feed\Rss20', 'generate'),
-		'item'	=> 'Rhyme\IsotopeFeedsBundle\FeedItem\Rss20',
-        'format'=> 'rss',
-	),
-);
+    use Rhyme\IsotopeFeedsBundle\Feed;
+    use Rhyme\IsotopeFeedsBundle\Model;
+    use Rhyme\IsotopeFeedsBundle\Hooks;
+    use Rhyme\IsotopeFeedsBundle\FeedItem;
+    use Rhyme\IsotopeFeedsBundle\Helper\IsotopeFeeds as IsotopeFeedsHelper;
 
-if (TL_MODE == 'BE')
-{
-	$GLOBALS['TL_CSS'][] = 'bundles/rhymeisotopefeeds/assets/css/isotope-feeds.css|static';
-	$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/rhymeisotopefeeds/assets/js/isotope-feeds.js|static';
+    /**
+     * Isotope Feeds
+     */
+    $GLOBALS['ISO_FEEDS'] = [
+        'googlebase' => [
+            'feed' => [Feed\GoogleMerchant::class, 'generate'],
+            'item' => FeedItem\GoogleMerchant::class,
+            'format' => 'rss',
+        ],
+        'rss20' => [
+            'feed' => [Feed\Rss20::class, 'generate'],
+            'item' => FeedItem\Rss20::class,
+            'format' => 'rss',
+        ],
+    ];
+
+    /**
+     * Scripts
+     */
+    if (TL_MODE === 'BE')
+    {
+        $GLOBALS['TL_CSS'][] = 'bundles/rhymeisotopefeeds/assets/css/isotope-feeds.css|static';
+        $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/rhymeisotopefeeds/assets/js/isotope-feeds.js|static';
+    }
+
+
+    /**
+     * Cron jobs
+     */
+    $GLOBALS['TL_CRON']['daily'][] = [IsotopeFeedsHelper::class, 'generateFeeds'];
+
+    /**
+     * Hooks
+     */
+    $GLOBALS['TL_HOOKS']['removeOldFeeds'][] = [Hooks\RemoveOldFeeds\IsotopeFeeds::class, 'preserveFeeds'];
+    $GLOBALS['TL_HOOKS']['executePreActions'][] = [Hooks\ExecutePreActions\IsotopeFeeds::class, 'ajaxHandler'];
+
+    /**
+     * Models
+     */
+    $GLOBALS['TL_MODELS'][Model\GoogleTaxonomy::getTable()] = Model\GoogleTaxonomy::class;
 }
-
-
-/**
- * Cron jobs
- */
-$GLOBALS['TL_CRON']['daily'][] = array('Rhyme\IsotopeFeedsBundle\Helper\IsotopeFeeds', 'generateFeeds');
-
-/**
- * Hooks
- */
-$GLOBALS['TL_HOOKS']['removeOldFeeds'][] = array('Rhyme\IsotopeFeedsBundle\Hooks\RemoveOldFeeds\IsotopeFeeds', 'preserveFeeds');
-$GLOBALS['TL_HOOKS']['executePreActions'][] = array('Rhyme\IsotopeFeedsBundle\Hooks\ExecutePreActions\IsotopeFeeds', 'ajaxHandler');
-
-/**
-* Models
-*/
-$GLOBALS['TL_MODELS'][\Rhyme\IsotopeFeedsBundle\Model\GoogleTaxonomy::getTable()] = 'Rhyme\IsotopeFeedsBundle\Model\GoogleTaxonomy';

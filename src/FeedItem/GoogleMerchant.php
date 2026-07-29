@@ -49,6 +49,7 @@ class GoogleMerchant extends Rss20
 			'size',
 			'gender',
 			'age_group',
+            'product_highlight',
 		);
 
         // If the GTIN is empty and the combination of the MPN and brand is empty

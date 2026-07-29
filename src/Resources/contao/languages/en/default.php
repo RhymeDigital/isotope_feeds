@@ -9,14 +9,19 @@
  * @link       http://rhyme.digital
  * @license    http://opensource.org/licenses/lgpl-3.0.html
  */
- 
-/**
- * Isotope Feeds
- */
-$GLOBALS['TL_LANG']['ISO_FEEDS']['googlebase'] = 'Google Base';
-$GLOBALS['TL_LANG']['ISO_FEEDS']['rss20'] = 'RSS 2.0';
 
-/**
- * Misc
- */
-$GLOBALS['TL_LANG']['ERR']['googleReq'] = 'This field is required if you wish to use Google Merchant Feeds';
+declare(strict_types=1);
+
+namespace {
+
+    /**
+     * Isotope Feeds
+     */
+    $GLOBALS['TL_LANG']['ISO_FEEDS']['googlebase'] = 'Google Base';
+    $GLOBALS['TL_LANG']['ISO_FEEDS']['rss20'] = 'RSS 2.0';
+
+    /**
+     * Misc
+     */
+    $GLOBALS['TL_LANG']['ERR']['googleReq'] = 'This field is required if you wish to use Google Merchant Feeds';
+}
