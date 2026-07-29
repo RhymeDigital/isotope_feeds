@@ -31,6 +31,7 @@ $GLOBALS['TL_LANG']['tl_iso_product']['gid_material'] = array('Google Product Ma
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_pattern'] = array('Google Product Pattern', 'Please enter a pattern for this product in the Google Feed.');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_shipping_label'] = array('Google Product Shipping Label', 'Please enter a shipping label for this product in the Google Feed.');
 $GLOBALS['TL_LANG']['tl_iso_product']['gid_shipping_weight'] = array('Google Product Shipping Weight', 'Please enter a shipping weight for this product in the Google Feed.');
+$GLOBALS['TL_LANG']['tl_iso_product']['gid_product_highlight'] = array('Google Product Highlights', 'Use the product highlight attribute to provide short list of the most relevant highlights of your product in the Google Feed. The highlights you submit should provide shoppers with easily consumable, quick-to-scan sentence fragments that answer the most common consumer questions or that focus on the most important attributes of the product. Limit 150 characters per highlight. Recommended 4-6 highlights, minimum 2, maximum 100.');
 
 /**
  * Reference

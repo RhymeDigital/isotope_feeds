@@ -226,3 +226,13 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_description'] = array
     'attributes'              => array('legend'=>'feed_legend:hide'),
     'sql'                     => "text NULL"
 );
+
+$GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_product_highlight'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_iso_product']['gid_product_highlight'],
+    'exclude'                 => true,
+    'inputType'               => 'listWizard',
+    'eval'                    => array('tl_class' => 'clr'),
+    'attributes'              => array('legend'=>'feed_legend:hide'),
+    'sql'                     => "tinytext NULL"
+);

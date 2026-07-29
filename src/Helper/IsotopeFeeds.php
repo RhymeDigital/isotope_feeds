@@ -467,8 +467,11 @@ class IsotopeFeeds extends Controller
 			//Custom product category taxonomy
             $productType = StringUtil::deserialize($objProduct->gid_product_type);
 			$objItem->product_type = strlen(($objProduct->gid_product_type_manual ?? '')) ? $objProduct->gid_product_type_manual : $productType;
-			
-			//HOOK for other data that needs to be added
+
+            // Product highlights
+            $objItem->product_highlight = StringUtil::deserialize($objProduct->gid_product_highlight);
+
+            //HOOK for other data that needs to be added
 			if (isset($GLOBALS['ISO_HOOKS']['feedItem']) && is_array($GLOBALS['ISO_HOOKS']['feedItem']))
 			{
 				foreach ($GLOBALS['ISO_HOOKS']['feedItem'] as $callback)
