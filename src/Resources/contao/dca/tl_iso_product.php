@@ -234,5 +234,5 @@ $GLOBALS['TL_DCA']['tl_iso_product']['fields']['gid_product_highlight'] = array
     'inputType'               => 'listWizard',
     'eval'                    => array('tl_class' => 'clr'),
     'attributes'              => array('legend'=>'feed_legend:hide'),
-    'sql'                     => "tinytext NULL"
+    'sql'                     => "blob NULL"
 );
